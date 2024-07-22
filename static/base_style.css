@@ -1,0 +1,90 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(66deg, #e38010, #1535bf);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #ff0000
+}
+
+.navbar-nav .nav-link {
+    color: #3012db;
+    font-size: 1.3rem;
+    margin-left: 50px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ff0b0bc8;
+}
+
+.container {
+    height: 40%;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    border-radius: 8px;
+    margin-bottom: 250px;
+}
+
+.users {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px solid #050000;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #b9deed, #efefef);
+    box-sizing: border-box;
+}
+
+footer {
+    color: #010001;
+    font-size: 20px;
+}
+
+.menu h3 {
+    color: #0056b3;
+
+}
+
+.done-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.edit-btn {
+    background-color: #ffc107;
+    color: black;
+    margin-right: 10px;
+}
+
+.del-btn {
+    background-color: #dc3545;
+    color: white;
+
+}
+
+.save-edit-btn {
+    /* margin-top: 5px; */
+    background-color: #28a745;
+    color: white;
+}
+
+.cancel-edit-btn {
+    /* margin-top: 5px; */
+    background-color: #dc3545;
+    color: white;
+
+}
+
+.btn {
+
+    position: relative;
+    left: 900px;
+    top: 5px;
+
+}

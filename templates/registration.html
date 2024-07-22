@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block metadata %}
+<link rel="stylesheet" href="{{ url_for('static', path='/registration.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="form-container sign-up">
+    <form action="/auth/reg/register" id='register-form'>
+        <h1>Registration</h1>
+        <input type="text" placeholder="Name" name="login" required>
+        <input type="email" placeholder="E-mail" name="email" required>
+        <input type="password" placeholder="Password" name="password" required>
+
+        <button type="submit">Sign Up</button>
+    </form>
+</div>
+
+<script>
+    /* При отправке формы register-form срабатывает обработчик события submit. event.preventDefault().чтобы обработать отправку через JavaScript */
+    document.getElementById('register-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        // Сбор данных из формы
+        let formData = new FormData(event.target);
+        
+        // Преобразование FormData в объект
+        let obj = {};
+        formData.forEach((value, key) => obj[key] = value);
+       
+        // Создание запроса
+        let request = new Request(event.target.action, {
+            method: 'POST',
+            body: JSON.stringify(Object.fromEntries(formData)),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+         // Отправка запроса и обработка ответа
+        fetch(request).then((response) => {
+            if (response.ok) {
+                window.location.href = '/login';
+            }
+            else {
+                alert('Ошибка регистрации!');
+            }
+    });
+    });
+</script>
+{% endblock %}

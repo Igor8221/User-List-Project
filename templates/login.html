@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block metadata %}
+<link rel="stylesheet" href="{{ url_for('static', path='/login.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+    <form action="/auth/jwt/login" id="login-form" method="post">
+        <h1>Login</h1>
+        <input type="text" placeholder="E-mail" name="username" required>
+        <input type="password" placeholder="Password" name="password" required>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('login-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        /* Создает объект FormData для сбора данных формы */
+        let formData = new FormData(event.target);
+        
+       /*  Получает URL, на который отправляется форма из атрибута action */
+        var url = new URL(event.target.action);
+        
+        /* Преобразует данные формы в объект params */
+        params = {}
+        formData.forEach((value, key) => params[key] = value);
+        
+        /* Создает объект Request для отправки POST запроса с заголовком Content-Type: application/x-www-form-urlencoded */
+        let request = new Request(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(params)
+        });
+        
+        /* Отправляет запрос и обрабатывает ответ*/
+        fetch(request).then((response) => {
+            if (response.ok) {
+                window.location.href = '/';
+            }
+            else {
+                alert('Ошибка входа!');
+            }
+    });
+    })
+</script>
+
+{% endblock %}

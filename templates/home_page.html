@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block metadata %}
+<link rel="stylesheet" href="{{ url_for('static', path='/search.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+<main>
+        <form class="search">
+           <input type="search" class="searchTerm" placeholder="What are you looking for?" name='q' 
+           {% if q %}
+           value="{{ q }}"
+           {% endif %}
+           >
+           <button type="submit" class="searchButton" href='#'>
+            <i class="fa fa-search"></i>
+          </button>
+        </form>
+    <div class="container">
+        {% for user in users %}
+        <div class="users {% if user.status %}active{% endif %}" id="user-{{user.id}}">
+            <div class="user-container">
+                <h5>{{user.login}}</h5>
+                <p>{{user.email}}</p>
+            </div>
+            <div class="btn-container">
+                <div class="user-btn">
+                   <button class="del-btn" id="{{user.id}}" type="button">Delete</button>
+                   <button class="edit-btn" id="{{user.id}}" type="button">Edit</button>
+                </div>
+               
+            </div>
+            <div class="edit-form d-none" id="edit-form-{{user.id}}">
+                <input type="text" class="edit-login" value="{{user.login}}">
+                <textarea class="adit-email" rows="3">{{user.email}}</textarea>
+                <button class="save-edit-btn" id="{{user.id}}" type="button">Save</button>
+                <button class="cancel-edit-btn" id="{{user.id}}" type="button">Cancel</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+
+<script>
+    
+    /* определяется URL API, к которому отправляются запросы для обновления и удаления пользователей */
+    const update_api = '/auth/users';
+    
+   /*  обновление страницы в случае успешного действия */
+    function reload_page(time) {
+        setTimeout(() => {
+            document.location.reload();
+        }, time);
+    }
+
+    // Delete button functional
+    
+   /*  добавляется слушатель события click. При клике на кнопку извлекается userId из атрибута id кнопки */
+    document.querySelectorAll('.del-btn').forEach((element) => {
+        element.addEventListener('click', function () {
+            const userId = this.id;
+            console.log(userId);
+            
+            /* Формируется URL url для отправки DELETE запроса на удаление пользователя с конкретным userId */
+            const url = `${update_api}/${userId}`;
+            
+           /*  Выполняется запрос fetch на указанный URL с методом DELETE */
+            fetch(url, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (response.ok) {
+                    reload_page(50);
+                } else {
+                    alert('Вы не авторизованы!')
+                }
+            });
+        });
+    });
+
+    // Edit button functional
+    document.querySelectorAll('.edit-btn').forEach((element) => {
+        element.addEventListener('click', function () {
+            const userId = this.id;
+            document.getElementById(`edit-form-${userId}`).classList.remove('d-none');
+        });
+    });
+
+    // Save edited user
+    document.querySelectorAll('.save-edit-btn').forEach((element) => {
+        element.addEventListener('click', function () {
+            const userId = this.id;
+            const login = document.querySelector(`#edit-form-${userId} .edit-login`).value;
+            const email = document.querySelector(`#edit-form-${userId} .adit-email`).value;
+
+            let user = {
+                'login': login,
+                'email': email,
+            };
+
+            fetch(`${update_api}/${userId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            })
+            .then(response => {
+                if (response.ok) {
+                    reload_page(50);
+                } else {
+                    alert('Вы не авторизованы!')
+                }
+            });
+        });
+    });
+
+    // Cancel edit
+    document.querySelectorAll('.cancel-edit-btn').forEach((element) => {
+        element.addEventListener('click', function () {
+            const userId = this.id;
+            document.getElementById(`edit-form-${userId}`).classList.add('d-none');
+        });
+    });
+</script>
+{% endblock %}
+
+

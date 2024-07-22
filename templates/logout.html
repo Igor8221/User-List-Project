@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block metadata %}
+<link rel="stylesheet" href="{{ url_for('static', path='/logout.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+    <form action="/auth/jwt/logout" id="logout-form" method="post">
+        <h1>Logout</h1>
+
+        <button type="submit">Logout</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('logout-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        let request = new Request(event.target.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/html',
+            },
+        });
+        fetch(request).then((response) => {
+            if (response.ok) {
+                window.location.href = '/';
+            }
+            else {
+                alert('Вы уже вышли!');
+            }
+    });
+    })
+</script>
+
+{% endblock %}
